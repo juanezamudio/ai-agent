@@ -57,18 +57,14 @@ $ python main.py "How do I reverse a string in Python?"
 In Python, you can reverse a string in several ways. Here are the most common methods:
 
 1. Using slicing:
-   ```python
-   text = "Hello, World!"
-   reversed_text = text[::-1]
-   print(reversed_text)  # Output: "!dlroW ,olleH"
-   ```
+    text = "Hello, World!"
+    reversed_text = text[::-1]
+    print(reversed_text)  # Output: "!dlroW ,olleH"
 
 2. Using the reversed() function with join():
-   ```python
-   text = "Hello, World!"
-   reversed_text = ''.join(reversed(text))
-   print(reversed_text)  # Output: "!dlroW ,olleH"
-   ```
+    text = "Hello, World!"
+    reversed_text = ''.join(reversed(text))
+    print(reversed_text)  # Output: "!dlroW ,olleH"
 
 The slicing method is generally the most Pythonic and efficient way to reverse a string.
 ```
