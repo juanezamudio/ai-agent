@@ -2,6 +2,8 @@ import os
 from dotenv import load_dotenv
 from google import genai
 import sys
+import config
+from functions.get_files_info import schema_get_files_info
 
 def main():
     load_dotenv()
@@ -22,9 +24,16 @@ def main():
         genai.types.Content(role="user", parts=[genai.types.Part(text=user_prompt)])
     ]
 
+    available_functions = genai.types.Tool(
+        function_declarations = [
+            schema_get_files_info
+        ]
+    )
+
     response = client.models.generate_content(
         model="gemini-2.0-flash-001",
-        contents=messages
+        contents=messages,
+        config=genai.types.GenerateContentConfig(tools=[available_functions], system_instruction=config.SYSTEM_PROMPT)
     )
 
     prompt_tokens = response.usage_metadata.prompt_token_count
@@ -35,7 +44,9 @@ def main():
         print(f"Prompt tokens: {prompt_tokens}")
         print(f"Response tokens: {response_tokens}")
 
-    print(response.text)
+    print(f"{response.text}\n")
+    print(f"Calling function: {response.function_calls[0].name}({response.function_calls[0].args})\n")
+
 
 if __name__ == "__main__":
     main()

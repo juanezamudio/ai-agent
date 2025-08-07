@@ -2,6 +2,7 @@ import unittest
 from functions.get_files_info import get_files_info
 from functions.get_file_content import get_file_content
 from functions.write_file import write_file
+from functions.run_python import run_python_file
 
 class TestFunctions(unittest.TestCase):
 
@@ -56,6 +57,19 @@ class TestFunctions(unittest.TestCase):
         print(f"{result_one}\n")
         print(f"{result_two}\n")
         print(f"{result_three}\n")
+
+    def test_run_python_file(self):
+        result_one = run_python_file("calculator", "main.py")
+        result_two = run_python_file("calculator", "main.py", ["3 + 5"])
+        result_three = run_python_file("calculator", "tests.py")
+        result_four = run_python_file("calculator", "../main.py")
+        result_five = run_python_file("calculator", "nonexistent.py")
+
+        print(f"{result_one}\n")
+        print(f"{result_two}\n")
+        print(f"{result_three}\n")
+        print(f"{result_four}\n")
+        print(f"{result_five}\n")
 
 if __name__ == "__main__":
     unittest.main()
