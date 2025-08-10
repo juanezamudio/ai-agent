@@ -1,5 +1,6 @@
 import os
 import config
+from google import genai
 
 def get_file_content(working_directory, file_path):
     working_directory_full_path = os.path.abspath(working_directory)
@@ -22,5 +23,19 @@ def get_file_content(working_directory, file_path):
 
     except ValueError as e:
         return f"Error: {e}"
-        
+
+schema_get_file_content = genai.types.FunctionDeclaration(
+    name="get_file_content",
+    description="Read file contents in the specified file path, constrained to the working directory and max file size.",
+    
+    parameters=genai.types.Schema(
+        type=genai.types.Type.OBJECT,
+        properties={
+            "file_path": genai.types.Schema(
+                type=genai.types.Type.STRING,
+                description="The file path to read, relative to the working directory.",
+            ),
+        },
+    ),
+)
             
