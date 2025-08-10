@@ -1,13 +1,16 @@
 # 🤖 AI Code Assistant
 
-A command-line interface (CLI) tool that leverages Google's Gemini AI to assist with coding questions and provide programming help. Built with Python 3.12+.
+A command-line interface (CLI) tool that leverages Google's Gemini AI to assist with coding questions, debugging, and file operations. Built with Python 3.12+.
 
 ## ✨ Features
 
 - 🔍 Get instant coding help directly in your terminal
+- 🐛 Debug and fix code issues with AI assistance
+- 📁 File system operations (read, write, list files)
+- 🐍 Execute and test Python code
 - 💡 Powered by Google's Gemini 2.0 Flash AI model
 - 📊 Token usage tracking for monitoring API costs
-- 🔧 Simple and intuitive command-line interface
+- 🔒 Secure file operations with working directory restrictions
 
 ## 🚀 Installation
 
@@ -42,50 +45,47 @@ A command-line interface (CLI) tool that leverages Google's Gemini AI to assist 
 # Basic usage
 python main.py "your coding question here"
 
-# Example
-python main.py "How do I implement a binary search in Python?"
+# Enable verbose mode (shows token usage and function calls)
+python main.py "your question" --verbose
 
-# Verbose mode (shows token usage)
-python main.py "Explain async/await in Python" --verbose
+# Example: Debug a calculation issue
+python main.py "my pkg/calculator.py file seems to have a bug. 3 + 7 * 2 shouldn't be 20"
+
+# List files in a directory
+python main.py "what files are in the root directory?"
+
+# Read file contents
+python main.py "what's in lorem.txt?"
+
+# Run Python files
+python main.py "run tests.py"
 ```
 
-## 📝 Example Output
+## 🛡️ Security
 
-```
-$ python main.py "How do I reverse a string in Python?"
+- All file operations are restricted to the configured working directory
+- The tool will not access files outside the working directory
+- Function calls are validated and sanitized
 
-In Python, you can reverse a string in several ways. Here are the most common methods:
+## ⚙️ Configuration Options
 
-1. Using slicing:
-    text = "Hello, World!"
-    reversed_text = text[::-1]
-    print(reversed_text)  # Output: "!dlroW ,olleH"
-
-2. Using the reversed() function with join():
-    text = "Hello, World!"
-    reversed_text = ''.join(reversed(text))
-    print(reversed_text)  # Output: "!dlroW ,olleH"
-
-The slicing method is generally the most Pythonic and efficient way to reverse a string.
-```
+Edit `config.py` to customize:
+- `MAX_FILE_SIZE`: Maximum file size for read operations (default: 10000 bytes)
+- `MAX_EXECUTION_TIME`: Maximum execution time for Python scripts (default: 30 seconds)
+- `WORKING_DIRECTORY`: Base directory for file operations (default: "./calculator")
+- `MAX_ITERATIONS`: Maximum number of AI iterations (default: 20)
 
 ## 🤝 Contributing
 
-Contributions are welcome! Feel free to open an issue or submit a pull request.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
+## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 📬 Contact
 
-Juan Zamudio - [@your_twitter](https://twitter.com/your_twitter)
+Juan Zamudio - [LinkedIn](https://www.linkedin.com/in/juanezamudio/)
 
 ---
 

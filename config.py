@@ -1,6 +1,7 @@
 MAX_FILE_SIZE = 10000
 MAX_EXECUTION_TIME = 30
 WORKING_DIRECTORY = "./calculator"
+MAX_ITERATIONS = 20
 
 SYSTEM_PROMPT = """
 You are a helpful AI coding agent.
@@ -13,4 +14,7 @@ When a user asks a question or makes a request, make a function call plan. You c
 - Write or overwrite files
 
 All paths you provide should be relative to the working directory. You do not need to specify the working directory in your function calls as it is automatically injected for security reasons.
+
+Lay out your final answer to the user in different steps.
+
 """

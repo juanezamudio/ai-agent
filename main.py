@@ -36,9 +36,7 @@ def call_function(function_call_part, verbose=False):
     args["working_directory"] = config.WORKING_DIRECTORY
 
     try:
-        print(f"DEBUG: Calling {function_call_part.name} with args {args}")
         result = function_map[function_call_part.name](**args)
-        print(f"DEBUG: Function returned: {result}")
 
         return genai.types.Content(
             role = "tool",
@@ -50,7 +48,6 @@ def call_function(function_call_part, verbose=False):
             ]
         )
     except Exception as e:
-        print(f"DEBUG: Function call failed: {function_call_part.name}")
         return genai.types.Content(
             role="tool",
             parts=[
@@ -79,6 +76,11 @@ def generate_content(client, messages, verbose):
             system_instruction=config.SYSTEM_PROMPT
         ),
     )
+
+    if response.candidates:
+        for candidate in response.candidates:
+            print(f"Candidate: {candidate.content.parts[0].text}")
+            messages.append(candidate.content)
     
     if verbose:
         print("Prompt tokens:", response.usage_metadata.prompt_token_count)
@@ -87,11 +89,6 @@ def generate_content(client, messages, verbose):
     # If there are no function calls, return the text response
     if not response.function_calls:
         return response.text
-
-    messages.append(genai.types.Content(
-        role="tool",
-        parts=[genai.types.Part(function_call=fc) for fc in response.function_calls]
-    ))
     
     # Handle all function calls
     function_responses = []
@@ -114,9 +111,8 @@ def generate_content(client, messages, verbose):
         role="tool",
         parts=function_responses
     ))
-    
-    # Recursively call generate_content to get the final response
-    return generate_content(client, messages, verbose)
+
+    return None
     
 def main():
     load_dotenv()
@@ -124,6 +120,8 @@ def main():
     client = genai.Client(api_key=api_key)
     
     args = []
+    verbose = "--verbose" in sys.argv
+
     for arg in sys.argv[1:]:
         if not arg.startswith("--"):
             args.append(arg)
@@ -140,10 +138,24 @@ def main():
         genai.types.Content(role="user", parts=[genai.types.Part(text=user_prompt)])
     ]
 
-    response = generate_content(client, messages, True if "--verbose" in args else False)
+    # Loop up to MAX_ITERATIONS times to call generate_content to get the final response
+    counter = 0
+    while True:
+        counter += 1
 
-    print(f"User prompt: {user_prompt}")
-    print(f"-> {response}")
+        if counter > config.MAX_ITERATIONS:
+            print(f"Max iterations reached: {counter}")
+            break
+
+        try:
+            final_response = generate_content(client, messages, verbose)
+
+            if final_response:
+                print(f"-> {final_response}")
+                break
+
+        except Exception as e:
+            print(f"Error: {e}")
 
 
 if __name__ == "__main__":
